@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/estilos.css')}}">
+    <title>Busqueda</title>
+  </head>
+  <body>
+    <h1>Busqueda</h1>
+    <div class="formulario">
+      <form action="{{url_for('busqueda')}}" method="POST">
+        <div>
+          <label>Búsqueda de: </label> <br/>
+          <input type="text" name="busqueda" placeholder="Escriba para buscar" maxlength="30" required >
+        </div>
+        <button type="submit" class="btn">
+          Guardar
+        </button>
+      </form>
+    </div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in r %}
+          <tr>
+              <td>{{d['codigo']}}</td>
+              <td>{{d['nombre']}}</td>
+              <td>{{d['primer_apellido']}}</td>
+              <td>{{d['segundo_apellido']}}</td>
+          </tr>
+          {% endfor%}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
