@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/estilos.css')}}">
+    <title>El Almoadino</title>
+  </head>
+  <body>
+    <div class="formulario">
+      <h1>Operaciones con Articulos</h1>
+      <form action="{{url_for('reporte_articulo')}}" method="POST">
+        <div>
+          <label>Nombre: </label> <br/>
+          <input type="text" name="nombre" placeholder="Escriba el nombre aquí" >
+        </div>
+        <div>
+          <label>Precio mayor a: </label> <br/>
+          <input type="number" step="any" name="precio_mayor">
+        </div>
+        <div>
+          <label>Precio menor a: </label> <br/>
+          <input type="number" step="any" type="text" name="precio_menor" >
+        </div>
+        <div>
+            <label>Material: </label> <br/>
+            <input type="text" name="material" placeholder="Escriba el material aquí" >
+        </div>
+        <div>
+            <label>Nombre del Proveedor: </label> <br/>
+            <input type="text" name="proveedor" placeholder="Escriba el nombre del proveedor aquí" >
+        </div>
+        <div>
+            <label>Direccion del Proveedor: </label> <br/>
+            <input type="text" name="proveedor_direccion" placeholder="Escriba la direccion del proveedor aquí" >
+        </div>
+        <div>
+          <label>Cantidad mayor a: </label> <br/>
+          <input type="number" name="cantidad_mayor" >
+        </div>
+        <div>
+          <label>Cantidad menor a: </label> <br/>
+          <input type="number" name="cantidad_menor" >
+        </div>
+        <button type="submit" class="btn">
+          Buscar
+        </button>
+      </form>
+      <a href="/añadir_articulo" ><button class="btn2">Añadir Sofa</button></a>
+    </div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Código</td>
+            <td>Nombre</td>
+            <td>Precio</td>
+            <td>Material</td>
+            <td>Codigo Proveedor</td>
+            <td>Nombre Proveedor</td>
+            <td>Direccion Proveedor</td>
+            <td>Cantidad</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in r %}
+          <tr>
+              <td>{{d['codigo']}}</td>
+              <td>{{d['nombre']}}</td>
+              <td>{{d['precio']}}</td>
+              <td>{{d['material']}}</td>
+              <td>{{d['proveedor_codigo']}}</td>
+              <td>{{d['proveedor_nombre']}}</td>
+              <td>{{d['proveedor_direccion']}}</td>
+              <td>{{d['cantidad']}}</td>
+          </tr>
+          {% endfor%}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

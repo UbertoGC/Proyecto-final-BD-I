@@ -253,3 +253,36 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+
+
+DELIMITER //
+drop procedure if exists `busqueda_ventas_gerente`;//
+CREATE  PROCEDURE `busqueda_ventas_gerente`(comprador_nombre varchar(30), comprador_apellido1 varchar(30)
+, comprador_apellido2 varchar(30), sofa_nombre varchar(30), preunitario_mayor decimal(10,2),  preunitario_menor decimal(10,2), total_mayor decimal(10,2), total_menor decimal(10.2), cantidad_mayor integer, cantidad_menor integer)
+BEGIN
+    if ISnull(comprador_nombre) then
+		set comprador_nombre='';
+    end if;
+    if ISnull(comprador_apellido1) then
+		set comprador_apellido1='';
+    end if;
+    if ISnull(comprador_apellido2) then
+		set comprador_apellido2='';
+    end if;
+    if ISnull(sofa_nombre) then
+		set sofa_nombre='';
+    end if;
+	select n.*, s.codigo, s.nombre, s.precio, v.cantidad, s.precio*v.cantidad as 'total' from nombre n 
+    inner join ventas v on v.usuario_c = n.codigo_persona inner join sofas s on s.codigo=v.sofa_c
+    where n.nombres like concat(comprador_nombre,'%') and 
+    n.primer_apellido like concat(comprador_apellido1,'%') and
+    n.segundo_apellido like concat(comprador_apellido2,'%') and
+    preunitario_mayor < s.precio and s.precio < preunitario_menor and
+    cantidad_mayor < v.cantidad and v.cantidad < cantidad_menor and
+    total_mayor < s.precio*v.cantidad and s.precio*v.cantidad < total_menor
+    order by s.codigo;
+END;
+//
+DELIMITER ;
+call busqueda_ventas_gerente('Sofa',0.0,10000.00,null,null,null,100,300);
