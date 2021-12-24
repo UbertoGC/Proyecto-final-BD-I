@@ -125,7 +125,91 @@ insert into Persona values(1,'2001-08-16','F','Calle Fosefall 201');
 insert into Trabajadores values(1,1050.50,'2010-10-28');
 insert into Gerente values(1,'Minalima','Lissira');
 insert into Usuarios values(1,'Limina','12345');
-
+/*Oficina*/
+insert into oficina values(1,'Peru','Av. Lima 102, Lima');
+insert into oficina values(2,'Peru','Calle Saul 12, Arequipa');
+insert into oficina values(3,'Peru','Av. Jorge 25, Ayacucho');
+insert into oficina values(4,'Peru','Calle Hindun 33, Lima');
+insert into oficina values(5,'Peru','Av. Moar 45, Ica');
+insert into oficina values(6,'Peru','Calle Koin 67, Amazonas');
+insert into oficina values(7,'Peru','Av. Lima 102, Puno');
+insert into oficina values(8,'Peru','Calle Saul 12, Huancayo');
+insert into oficina values(9,'Peru','Av. Jorge 25, Moquegua');
+insert into oficina values(10,'Peru','Calle Hindun 33, Tacna');
+insert into oficina values(11,'Chile','Av. La Mar 102, Santiago');
+insert into oficina values(12,'Chile','Calle Jose 12, Choquimbo');
+insert into oficina values(13,'Chile','Av. Venezuela 25, Aconcagua');
+insert into oficina values(14,'Chile','Calle Firulais 33, Colchagua');
+insert into oficina values(15,'Chile','Av. Mahoma 45, Maule');
+insert into oficina values(16,'Chile','Calle Kain 67, Concepción');
+insert into oficina values(17,'Chile','Av. La plaza 102, Valdivia');
+insert into oficina values(18,'Chile','Calle Marruecos 12, Chiloé');
+/*almacen*/
+insert into almacen values(1,1,100);
+insert into almacen values(1,2,152);
+insert into almacen values(1,10,20);
+insert into almacen values(2,1,170);
+insert into almacen values(2,11,14);
+insert into almacen values(3,10,120);
+insert into almacen values(3,11,90);
+insert into almacen values(4,1,109);
+insert into almacen values(4,10,100);
+insert into almacen values(4,14,87);
+insert into almacen values(4,18,70);
+insert into almacen values(5,2,135);
+insert into almacen values(6,2,50);
+insert into almacen values(6,10,20);
+insert into almacen values(7,3,13);
+insert into almacen values(7,4,200);
+insert into almacen values(7,5,87);
+insert into almacen values(8,8,120);
+insert into almacen values(8,7,141);
+insert into almacen values(9,7,119);
+insert into almacen values(9,13,24);
+insert into almacen values(9,17,170);
+insert into almacen values(10,9,510);
+insert into almacen values(11,11,20);
+insert into almacen values(12,16,110);
+insert into almacen values(12,14,50);
+insert into almacen values(13,16,45);
+insert into almacen values(13,11,70);
+insert into almacen values(14,9,95);
+insert into almacen values(14,1,147);
+insert into almacen values(14,10,100);
+insert into almacen values(14,18,113);
+insert into almacen values(15,18,140);
+/*Sofas*/
+insert into sofas values(1,'Sofa de dos plazas',100.50,1,'cuero');
+insert into sofas values(2,'Sofa comodidad',150.00,1,'cuero');
+insert into sofas values(3,'Sofa libertad',200.50,2,'cuero');
+insert into sofas values(4,'Sofa Detray',125.00,2,'cuero');
+insert into sofas values(5,'Milano de algodon',175.50,3,'algodon');
+insert into sofas values(6,'Sofa chair',120.00,3,'algodon');
+insert into sofas values(7,'Mizano',180.50,4,'algodon');
+insert into sofas values(8,'Sofa Oveja',130.00,4,'lana');
+insert into sofas values(9,'Sofa de dos plazas',170.50,5,'lana');
+insert into sofas values(10,'Sofa de dos Sofa',107.00,5,'cuerina');
+insert into sofas values(11,'Sofa familiar',180.00,6,'cuerina');
+insert into sofas values(12,'Sofa chair',195.50,6,'cuerina');
+insert into sofas values(13,'Sofa familiar',225.50,7,'sintetico');
+insert into sofas values(14,'Sofa de dos plazas',150.00,7,'sintetico');
+insert into sofas values(15,'Sofa chair',100.00,8,'sintetico');
+/*Proveedor*/
+insert into proveedor values(1,'Tecnologia Moderna','Av. Kiron 105');
+insert into proveedor values(2,'Vivienda Comoda','Calle Aeon 15');
+insert into proveedor values(3,'Vida Saludable','Av. Thomas 10');
+insert into proveedor values(4,'Tecnologia de Hogares','Calle Santos 54');
+insert into proveedor values(5,'El Cojin del cielo','Av. Mirror 28');
+insert into proveedor values(6,'Elegancia Hogareña','Av. Antoanet 47');
+insert into proveedor values(7,'Cazando Comodidad','Av. Limad 10');
+insert into proveedor values(8,'Vida Agradable','Av. Jilklost 6');
+insert into proveedor values(9,'Sperlight','Calle Asther 14');
+insert into proveedor values(10,'Nogiro','Calle Asta 7');
+insert into proveedor values(11,'Nostable','Calle Limodead 19');
+insert into proveedor values(12,'Casa Almohada','Calle Thorner 23');
+insert into proveedor values(13,'Space House','Calle Kirshat 33');
+insert into proveedor values(14,'Cagirtul','Calle Thuraliu 78');
+insert into proveedor values(15,'Essence of House','Av. Antares 49');
 /*PROCESOS DE ALMACENAMIENTO*/
 DELIMITER //
 drop procedure if exists `existencia`;//
@@ -142,28 +226,30 @@ END;
 DELIMITER ;
 DELIMITER //
 drop procedure if exists `busqueda_articulo_gerente`;//
-CREATE  PROCEDURE `busqueda_articulo_gerente`(IN nom varchar(30), IN pre_mayor decimal(10,2),IN pre_menor decimal(10,2),in mate varchar(30), in proveedor_nombre varchar(30), in proveedor_direccion text, in cantidad_mayor integer, in cantidad_menor integer)
+CREATE  PROCEDURE `busqueda_articulo_gerente`(nom varchar(30), pre_mayor decimal(10,2), pre_menor decimal(10,2), mate varchar(30), proveedor_nombre varchar(30), proveedor_direccion text, cantidad_mayor integer, cantidad_menor integer)
 BEGIN
-	if(pre_mayor=null) then
-		set pre_mayor=0.0;
+    if ISnull(nom) then
+		set nom='';
     end if;
-    if(pre_menor=null) then
-		set pre_menor=10000000.0;
+    if ISnull(mate) then
+		set mate='';
     end if;
-    if(cantidad_mayor=null) then
-		set cantidad_mayor=-1;
+    if ISnull(proveedor_nombre) then
+		set proveedor_nombre='';
     end if;
-    if(cantidad_menor=null) then
-		set cantidad_menor=10000000;
+    if ISnull(proveedor_direccion) then
+		set proveedor_direccion='';
     end if;
-    
 	select s.codigo, s.nombre, s.precio, s.material, p.codigo, p.nombre, p.direccion, 
-    (select sum(a.cantidad) from almacen a inner join Sofas s on a.sofa_c = s.codigo) as 'cantidad' from Sofas s
-    inner join Proveedor p on p.codigo like s.codigo_proveedor where s.nombre like concat('%',nom, '%') and 
-    pre_mayor<s.precio and pre_menor>s.precio and material like concat('%',mate, '%') and p.nombre like 
-    concat(proveedor_nombre, '%') and  p.direccion like concat('%',proveedor_direccion, '%') and
-    (select sum(a.cantidad) from almacen a inner join Sofas s on a.sofa_c = s.codigo)>cantidad_mayor and
-    (select sum(a.cantidad) from almacen a inner join Sofas s on a.sofa_c = s.codigo)<cantidad_menor;
+    sum(a.cantidad) as 'cantidad' from sofas s
+    inner join proveedor p on p.codigo like s.codigo_proveedor inner join almacen a on a.sofa_c=s.codigo 
+    where s.nombre like concat(nom,'%') and
+    p.nombre like concat(proveedor_nombre,'%') and
+    s.material like concat(mate,'%') and
+    p.direccion like concat('%',proveedor_direccion,'%') and 
+    pre_mayor < s.precio and s.precio < pre_menor
+    
+    group by s.codigo having sum(a.cantidad)>cantidad_mayor and sum(a.cantidad)<cantidad_menor order by s.codigo ;
 END;
 //
 DELIMITER ;
