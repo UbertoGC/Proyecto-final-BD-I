@@ -19,11 +19,37 @@
       <form action="{{url_for('verrificar')}}" method="POST">
         <div>
           <label>Usuario: </label> <br/>
-          <input type="text" name="user" placeholder="Escriba el usuario aquí" required >
+          <input type="text" name="user" placeholder="Escriba su usuario aquí" required >
         </div>
         <div>
           <label>Contraseña: </label> <br/>
-          <input type="text" name="contra" placeholder="Escriba la contraseña aquí" required >
+          <input type="text" name="contra" placeholder="Escriba su contraseña aquí" required >
+        </div>
+        <div>
+            <label>Nombre: </label> <br/>
+            <input type="text" name="nombre" placeholder="Escriba su nombre aquí" required >
+        </div>
+        <div>
+            <label>Primer Apellido: </label> <br/>
+            <input type="text" name="primer_apellido" placeholder="Escriba su primer apellido aquí" required >
+        </div>
+        <div>
+            <label>Segundo Apellido: </label> <br/>
+            <input type="text" name="segundo_apellido" placeholder="Escriba su segundo apellido aquí" required >
+        </div>
+        <div>
+            <label>Fecha de Nacimiento: </label> <br/>
+            <input type="date" name="fecha_de_nacimiento" placeholder="Escriba su fecha de nacimiento aquí" required >
+        </div>
+        <div>
+            <label>Genero: </label> <br/>
+            <input type="radio" name="genero" value="M" checked>Masculino
+            <br>
+            <input type="radio" name="genero" value="F">Femenino
+        </div>
+        <div>
+            <label>Direccion: </label> <br/>
+            <input type="text" name="direccion" placeholder="Escriba su direccion aquí" required >
         </div>
         <button type="submit" class="btn">
           Ingresar
