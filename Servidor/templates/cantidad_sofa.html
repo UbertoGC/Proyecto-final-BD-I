@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/estilos.css')}}">
+    <title>El Almoadino</title>
+  </head>
+  <body>
+    <div class="formulario">
+      <h1>Operaciones con Articulos</h1>
+      <form action="/gerente/cantidad_sofa/{{c}}" method="POST">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <td>Código de oficina</td>
+                <td>Pais</td>
+                <td>Direccion</td>
+                <td>Departamento</td>
+                <td>Cantidad</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for d in r %}
+              <tr>
+                  <td>{{d['codigo']}}</td>
+                  <td>{{d['pais']}}</td>
+                  <td>{{d['direccion']}}</td>
+                  <td>{{d['departamento']}}</td>
+                  <td><input type="number" name="cantidad{{d['codigo']}}" placeholder="Escriba la cantidad aquí"></td>
+              </tr>
+              {% endfor%}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="btn">
+          Añadir
+        </button>
+    </div>
+  </body>
+</html>

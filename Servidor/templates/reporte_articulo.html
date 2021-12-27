@@ -21,16 +21,24 @@
           <input type="number" step="any" type="text" name="precio_menor" >
         </div>
         <div>
-            <label>Material: </label> <br/>
-            <input type="text" name="material" placeholder="Escriba el material aquí" >
+          <label>Material: </label> <br/>
+          <input type="text" name="material" placeholder="Escriba el material aquí" >
         </div>
         <div>
-            <label>Nombre del Proveedor: </label> <br/>
-            <input type="text" name="proveedor" placeholder="Escriba el nombre del proveedor aquí" >
+          <label>Nombre del Proveedor: </label> <br/>
+          <input type="text" name="proveedor" placeholder="Escriba el nombre del proveedor aquí" >
         </div>
         <div>
-            <label>Direccion del Proveedor: </label> <br/>
-            <input type="text" name="proveedor_direccion" placeholder="Escriba la direccion del proveedor aquí" >
+          <label>Direccion del Proveedor: </label> <br/>
+          <input type="text" name="proveedor_direccion" placeholder="Escriba la direccion del proveedor aquí" >
+        </div>
+        <div>
+          <label>Pais del Proveedor: </label> <br/>
+          <input type="text" name="proveedor_pais" placeholder="Escriba el pais del proveedor aquí" >
+        </div>
+        <div>
+          <label>Departamento del Proveedor: </label> <br/>
+          <input type="text" name="proveedor_departamento" placeholder="Escriba el departamento del proveedor aquí" >
         </div>
         <div>
           <label>Cantidad mayor a: </label> <br/>
@@ -44,7 +52,7 @@
           Buscar
         </button>
       </form>
-      <a href="/añadir_articulo" ><button class="btn2">Añadir Sofa</button></a>
+      <a href="/gerente/anadir_articulo" ><button class="btn2">Añadir Sofa</button></a>
     </div>
     <div>
       <table>
@@ -56,7 +64,9 @@
             <td>Material</td>
             <td>Codigo Proveedor</td>
             <td>Nombre Proveedor</td>
-            <td>Direccion Proveedor</td>
+            <td>Direccion del Proveedor</td>
+            <td>Pais del Proveedor</td>
+            <td>Departamento del Proveedor</td>
             <td>Cantidad</td>
           </tr>
         </thead>
@@ -70,6 +80,8 @@
               <td>{{d['proveedor_codigo']}}</td>
               <td>{{d['proveedor_nombre']}}</td>
               <td>{{d['proveedor_direccion']}}</td>
+              <td>{{d['proveedor_pais']}}</td>
+              <td>{{d['proveedor_departamento']}}</td>
               <td>{{d['cantidad']}}</td>
           </tr>
           {% endfor%}

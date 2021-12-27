@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/estilos.css')}}">
+    <title>El Almoadino</title>
+  </head>
+  <body>
+    <div class="formulario">
+      <h1>Operaciones con Articulos</h1>
+      <form action="{{url_for('reporte_venta')}}" method="POST">
+        <div>
+          <label>Nombre del comprador: </label> <br/>
+          <input type="text" name="comprador_nombre" placeholder="Escriba el nombre aquí" >
+        </div>
+        <div>
+          <label>Primer Apellido del comprador: </label> <br/>
+          <input type="text" name="primer_apellido" placeholder="Escriba el primer apellido aquí" >
+        </div>
+        <div>
+          <label>Segundo Apellido del comprador: </label> <br/>
+          <input type="text" name="segundo_apellido" placeholder="Escriba el segundo apellido aquí" >
+        </div>
+        <div>
+          <label>Nombre del sofa: </label> <br/>
+          <input type="text" name="sofa_nombre" placeholder="Escriba el material aquí" >
+        </div>
+        <div>
+          <label>Material del sofa: </label> <br/>
+          <input type="text" name="material" placeholder="Escriba el material aquí" >
+        </div>
+        <div>
+          <label>Precio mayor a: </label> <br/>
+          <input type="number" step="any" name="precio_mayor">
+        </div>
+        <div>
+          <label>Precio menor a: </label> <br/>
+          <input type="number" step="any" type="text" name="precio_menor" >
+        </div>
+        <div>
+          <label>Cantidad mayor a: </label> <br/>
+          <input type="number" name="cantidad_mayor" >
+        </div>
+        <div>
+          <label>Cantidad menor a: </label> <br/>
+          <input type="number" name="cantidad_menor" >
+        </div>
+        <div>
+          <label>Total mayor a: </label> <br/>
+          <input type="number" step="any" name="total_mayor">
+        </div>
+        <div>
+          <label>Total menor a: </label> <br/>
+          <input type="number" step="any" name="total_menor" >
+        </div>
+        <button type="submit" class="btn">
+          Buscar
+        </button>
+      </form>
+    </div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Código</td>
+            <td>Nombre</td>
+            <td>Primer Apellido</td>
+            <td>Segundo Apellido</td>
+            <td>Codigo Sofa</td>
+            <td>Nombre Sofa</td>
+            <td>Material</td>
+            <td>Precio Unitario</td>
+            <td>Cantidad</td>
+            <td>Total</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in r %}
+          <tr>
+              <td>{{d['codigo']}}</td>
+              <td>{{d['nombre']}}</td>
+              <td>{{d['primer_apellido']}}</td>
+              <td>{{d['segundo_apellido']}}</td>
+              <td>{{d['sofa_codigo']}}</td>
+              <td>{{d['sofa_nombre']}}</td>
+              <td>{{d['sofa_material']}}</td>
+              <td>{{d['precio_unitario']}}</td>
+              <td>{{d['cantidad']}}</td>
+              <td>{{d['total']}}</td>
+          </tr>
+          {% endfor%}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

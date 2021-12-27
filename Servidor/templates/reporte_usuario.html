@@ -6,7 +6,7 @@
   </head>
   <body>
     <div class="formulario">
-      <h1>Inicie sesión</h1>
+      <h1>Operaciones con Articulos</h1>
       <form action="{{url_for('reporte_usuario')}}" method="POST">
         <div>
           <label>Nombre: </label> <br/>
@@ -22,17 +22,30 @@
         </div>
         <div>
           <label>Genero: </label> <br/>
-          <input type="text" name="genero" placeholder="Escriba el genero aquí" >
-        </div>
+          <input type="radio" name="genero" value="" checked>Ambos
+          <br>
+          <input type="radio" name="genero" value="M">Masculino
+          <br>
+          <input type="radio" name="genero" value="F">Femenino
+      </div>
         <div>
           <label>Direccion: </label> <br/>
           <input type="text" name="direccion" placeholder="Escriba la direccion aquí" >
+        </div>
+        <div>
+          <label>Pais: </label> <br/>
+          <input type="text" name="pais" placeholder="Escriba el pais aquí" >
+        </div>
+        <div>
+          <label>Departamento: </label> <br/>
+          <input type="text" name="departamento" placeholder="Escriba el departamento aquí" >
         </div>
         <button type="submit" class="btn">
           Buscar
         </button>
       </form>
     </div>
+    
     <div>
       <table>
         <thead>
@@ -44,6 +57,8 @@
             <td>Genero</td>
             <td>Direccion</td>
             <td>Fecha de Naci.</td>
+            <td>Pais</td>
+            <td>Departamento</td>
           </tr>
         </thead>
         <tbody>
@@ -56,6 +71,8 @@
               <td>{{d['genero']}}</td>
               <td>{{d['direccion']}}</td>
               <td>{{d['fecha_de_nacimiento']}}</td>
+              <td>{{d['pais']}}</td>
+              <td>{{d['departamento']}}</td>
           </tr>
           {% endfor%}
         </tbody>

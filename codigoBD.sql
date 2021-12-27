@@ -4,7 +4,7 @@ CREATE DATABASE venta_sofas;
 USE venta_sofas;
 
 CREATE TABLE  Persona (
-	codigo INTEGER PRIMARY KEY,
+	codigo INTEGER auto_increment primary KEY,
     fecha_de_nacimiento DATE,
     genero CHAR(1),
     direccion TEXT,
@@ -12,7 +12,7 @@ CREATE TABLE  Persona (
     departamento varchar(30));
     
 CREATE TABLE Nombre (
-	codigo_persona INTEGER UNIQUE,
+	codigo_persona INTEGER auto_increment UNIQUE,
     nombres VARCHAR(30),
     primer_apellido VARCHAR(30),
     segundo_apellido VARCHAR(30),
@@ -1164,9 +1164,21 @@ BEGIN
 	if (SELECT u.codigo_persona FROM usuarios u WHERE u.usuario=usuario AND u.clave=contrasena) then
 		SELECT u.codigo_persona, n.nombres, n.primer_apellido, n.segundo_apellido, 2 as 'status' FROM usuarios u inner join nombre n on n.codigo_persona=u.codigo_persona WHERE u.usuario=usuario AND u.clave=contrasena;
 	else
-		SELECT g.codigo, n.nombres, n.primer_apellido, n.segundo_apellido, p.pais, 1 as 'status' FROM gerente g inner join 
+		SELECT n.*, 1 as 'status' FROM gerente g inner join 
         nombre n on n.codigo_persona=g.codigo inner join persona p on p.codigo=n.codigo_persona WHERE g.usuario_g=usuario AND g.clave_g=contrasena;
 	end if;
+END;
+//
+DELIMITER ;
+DELIMITER //
+drop procedure if exists `actualizar_cantidad`;//
+CREATE  PROCEDURE `actualizar_cantidad`(oficina_2 integer, sofas_2 integer, cantidad_2 integer)
+BEGIN
+	if((select count(*) from almacen a where a.sofa_c=sofas_2 and a.oficina_c=oficina_2)>0) then
+		update almacen a set a.cantidad=cantidad_2 where a.sofa_c=sofas_2 and a.oficina_c=oficina_2;
+    else
+		insert into almacen values(sofas_2,oficina_2,cantidad_2);
+    end if;
 END;
 //
 DELIMITER ;
@@ -1177,26 +1189,18 @@ CREATE  PROCEDURE `registrar_usuario`(nombre_persona_2 varchar(30), primer_apell
 segundo_apellido_2 varchar(30), usuario_2 varchar(30), clave_2 text, pais_2 varchar(30), departamento_2 varchar(30), genero_2 varchar(1), direccion_2 text, fecha_de_nacimiento_2 date)
 BEGIN
 	declare c integer;
-	set c=(select max(n.codigo_persona) from nombre n)+1;
-    if ((select count(*) from nombre where nombres like nombre_persona_2 and 
-    primer_apellido like primer_apellido_2 and segundo_apellido like segundo_apellido_2)=0) then
+	set c=(select max(n.codigo_persona)+1 as 'maximo' from nombre n);
+    if ((select count(*) from nombre where nombres = nombre_persona_2 and 
+    primer_apellido = primer_apellido_2 and segundo_apellido = segundo_apellido_2)=0) then
 		if ((select count(*) from usuarios where usuario like usuario_2)=0) then
-			insert into nombre values(c, nombre_persona_2, primer_apellido, segundo_apellido);
+			insert into nombre values(c, nombre_persona_2, primer_apellido_2, segundo_apellido_2);
 			insert into persona values(c, fecha_de_nacimiento_2, genero_2, direccion_2, pais_2, departamento_2);
 			insert into usuarios values(c, usuario_2, clave_2);
-            set c=1;
-        else
-			set c=0;
 		end if;
-    else
-		set c=0;
     end if;
-    select c;
 END;
 //
 DELIMITER;
-
-
 DELIMITER //
 drop procedure if exists `comprar_sofa`;//
 CREATE  PROCEDURE `comprar_sofa`(codigo_persona_2 integer, codigo_sofa_2 integer, cantidad_2 integer, codigo_oficina integer)
@@ -1214,11 +1218,7 @@ BEGIN
 		else 
 			insert into ventas values(codigo_persona_2,codigo_sofa_2,f, cantidad_2);
 		end if;
-        set d=1;
-    else
-		set d=0;
     end if;
-    select d;
 END;
 //
 DELIMITER ;
@@ -1226,35 +1226,19 @@ DELIMITER ;
 DELIMITER //
 drop procedure if exists `registrar_sofa`;//
 CREATE  PROCEDURE `registrar_sofa`(nombre_2 varchar(30), precio_2 decimal(10,2), 
-material_2 varchar(30), proveedor_nombre_2 varchar(30), direccion_2 text, proveedor_pais_2 varchar(30), proveedor_departamento_2 varchar(30))
+material_2 varchar(30), codigo_proveedor integer)
 BEGIN
 	declare c integer;
-    declare d integer;
-    if ((select count(*) from sofas s inner join proveedor p on p.codigo = s.codigo_proveedor where s.nombre like nombre_2 and 
-    s.precio = precio_2 and s.material like material_2 and p.nombre like proveedor_nombre_2 and p.direccion like direccion_2)=0) then
-		if ((select count(*) from proveedor p where p.nombre like proveedor_nombre_2 and p.direccion like direccion_2
-			and p.pais like proveedor_pais_2 and p.departamento like proveedor_departamento_2)=1) then
-			set c=(select p.codigo from proveedor p where p.nombre like proveedor_nombre_2 and p.direccion like direccion_2);
-		else
-			set c=(select max(p.codigo) from proveedor p)+1;
-            insert into proveedor values(c,proveedor_nombre_2, direccion_2,proveedor_pais_2,proveedor_departamento_2);
-		end if;
-        set d=(select max(s.codigo) from sofas s)+1;
-        insert into sofas values(d,nombre_2, precio_2,c,material_2);
-        set c=1;
-    else
-		set c=0; 
-    end if;
-    select c;
+    set c=(select max(s.codigo) as 'maximo' from sofas s)+1;
+    insert into sofas values(c,nombre_2, precio_2,codigo_proveedor,material_2);
 END;
 //
 DELIMITER ;
 
-
 DELIMITER //
 drop procedure if exists `busqueda_usuario_gerente`;//
 CREATE  PROCEDURE `busqueda_usuario_gerente`(nombre_persona_2 varchar(30), primer_apellido_2 varchar(30), 
-segundo_apellido_2 varchar(30), usuario_2 varchar(30), clave_2 text, genero_usuario varchar(1), direccion_usuario text,
+segundo_apellido_2 varchar(30), genero_usuario varchar(1), direccion_usuario text,
 pais_2 varchar(30), departamento_2 varchar(30))
 BEGIN
     if ISnull(nombre_persona_2) then
@@ -1265,12 +1249,6 @@ BEGIN
     end if;
     if ISnull(segundo_apellido_2) then
 		set segundo_apellido_2='';
-    end if;
-    if ISnull(usuario_2) then
-		set usuario_2='';
-    end if;
-    if ISnull(clave_2) then
-		set clave_2='';
     end if;
     if ISnull(genero_usuario) then
 		set genero_usuario='';
@@ -1284,14 +1262,11 @@ BEGIN
     if ISnull(departamento_2) then
 		set departamento_2='';
     end if;
-	select n.*, u.usuario, u.clave, p.genero, p.direccion, p.fecha_de_nacimiento, p.pais, p.departamento from nombre n inner join
-    usuarios u on u.codigo_persona = n.codigo_persona inner join
-    persona p on p.codigo = u.codigo_persona
+	select n.*, p.genero, p.direccion, p.fecha_de_nacimiento, p.pais, p.departamento from nombre n inner join
+    persona p on p.codigo = n.codigo_persona inner join usuarios u on u.codigo_persona=n.codigo_persona
     where n.nombres like concat(nombre_persona_2,'%') and
     n.primer_apellido like concat(primer_apellido_2,'%') and
     n.segundo_apellido like concat(segundo_apellido_2,'%') and
-    u.usuario like concat('%',usuario_2,'%') and
-    u.clave like concat('%',clave_2,'%') and
     p.genero like concat('%',genero_usuario,'%') and
     p.direccion like concat('%',direccion_usuario,'%') and
     p.pais like concat(pais_2,'%') and
@@ -1300,7 +1275,6 @@ BEGIN
 END;
 //
 DELIMITER ;
-call busqueda_usuario_gerente(null,null,null,null,null,null,null,'peru',null);
 
 
 DELIMITER //
@@ -1345,10 +1319,10 @@ DELIMITER ;
 
 
 DELIMITER //
-drop procedure if exists `busqueda_ventas_gerente`;//
-CREATE  PROCEDURE `busqueda_ventas_gerente`(comprador_nombre varchar(30), comprador_apellido1 varchar(30)
-, comprador_apellido2 varchar(30), sofa_nombre varchar(30), preunitario_mayor decimal(10,2),  preunitario_menor decimal(10,2), 
-total_mayor decimal(10,2), total_menor decimal(10.2), cantidad_mayor integer, cantidad_menor integer)
+drop procedure if exists `busqueda_venta_gerente`;//
+CREATE  PROCEDURE `busqueda_venta_gerente`(comprador_nombre varchar(30), comprador_apellido1 varchar(30)
+, comprador_apellido2 varchar(30), sofa_nombre varchar(30), sofa_material varchar(30), preunitario_mayor decimal(10,2),  preunitario_menor decimal(10,2), 
+ cantidad_mayor integer, cantidad_menor integer, total_mayor decimal(10,2), total_menor decimal(10.2))
 BEGIN
     if ISnull(comprador_nombre) then
 		set comprador_nombre='';
@@ -1362,15 +1336,19 @@ BEGIN
     if ISnull(sofa_nombre) then
 		set sofa_nombre='';
     end if;
-	select n.*, s.codigo, s.nombre, s.precio, v.cantidad, s.precio*v.cantidad as 'total' from nombre n 
+    if ISnull(sofa_material) then
+		set sofa_material='';
+    end if;
+	select n.*, s.codigo, s.nombre, s.material, s.precio, v.cantidad, s.precio*v.cantidad as 'total' from nombre n 
     inner join ventas v on v.usuario_c = n.codigo_persona inner join sofas s on s.codigo=v.sofa_c
     where n.nombres like concat(comprador_nombre,'%') and 
     n.primer_apellido like concat(comprador_apellido1,'%') and
     n.segundo_apellido like concat(comprador_apellido2,'%') and
     s.nombre like concat(sofa_nombre,'%') and
+    s.material like concat(sofa_material,'%') and
     preunitario_mayor < s.precio and s.precio < preunitario_menor and
     cantidad_mayor < v.cantidad and v.cantidad < cantidad_menor and
-    total_mayor < s.precio*v.cantidad and s.precio*v.cantidad < total_menor
+    total_mayor < (s.precio*v.cantidad) and (s.precio*v.cantidad) < total_menor
     order by n.codigo_persona;
 END;
 //
