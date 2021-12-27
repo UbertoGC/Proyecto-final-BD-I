@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,flash
+from flask import Flask, render_template, session, request, redirect, sessions, url_for,flash
 from modelo import *
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ def home():
     
 @app.route('/login')
 def login():
-    return render_template("login.html")
+    return render_template("index.html")
 
 @app.route('/ingreso',methods=['GET','POST'])
 def ingreso():
@@ -32,8 +32,8 @@ def ingreso():
         return redirect(url_for('login'))
     else:
         if s==2:
-            codigo_user=resul[0]
-            return redirect(url_for('usuario'), c=codigo_user)
+            session['codigo']=resul['codigo']
+            return redirect(url_for('usuario'))
         else:
             return redirect(url_for('gerente'))
 
@@ -44,13 +44,28 @@ def usuario_actualizar(c):
 
 @app.route('/actualizar_usuario/<string:e>',methods=['POST','GET'])
 def actualizar_usuario(e):
-    modelo.actualizar_usuario(request,e)
+    codigo=int(e)
+    modelo.actualizar_usuario(request,codigo)
     return redirect(url_for('usuario'))
 
 @app.route('/usuario',methods=['GET'])
 def usuario():
-    return render_template("usuario.html")
+    codigo=session['codigo']
+    return render_template("usuario.html", c=codigo)
 
+@app.route('/comprar/<string:c>',methods=['GET'])
+def comprar(c):
+    codigo=int(c)
+    return render_template("comprar.html", d=codigo)
+
+@app.route('/comprar_2/<string:c>',methods=['POST','GET'])
+def comprar_2(c):
+    codigo=int(c)
+    modelo.comprar(request,codigo)
+    return redirect(url_for('usuario'))
+@app.route('/registrar_usuario',methods=['GET'])
+def registrar_usuario():
+    return render_template("registrar_usuario.html")
 @app.route('/verificar',methods=['POST','GET'])
 def verificar():
     d=modelo.registrar_usuario(request)
@@ -108,6 +123,16 @@ def cantidad_sofa(codigo2):
     modelo.editar_cantidad(request, codigo2)
     flash('Sofa actualizado/añadido')
     return redirect(url_for('reporte_articulo'))
+
+@app.route('/gerente/actualizar_articulo/<string:id>',methods=['GET'])
+def actualizar_articulo(id):
+    codigo2=int(id)
+    return render_template("actualizar_articulo.html", d=codigo2)
+
+@app.route('/gerente/cantidad_actualizar/<string:d>',methods=['POST'])
+def cantidad_actualizar(d):
+    resul=modelo.actualizar_sofa(request,d)
+    return render_template("cantidad_actualizada.html", r=resul, c=d)
 
 if __name__=='__main__':
     app.run(port=3000,debug=True)

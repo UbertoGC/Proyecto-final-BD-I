@@ -5,15 +5,6 @@
     <title>El Almoadino</title>
   </head>
   <body>
-    {% with messages = get_flashed_messages()  %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="flash" role="alert">
-      {{ message }}
-    </div> 
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
     <div class="formulario">
       <h1>Actualizar Usuario</h1>
       <form action="/actualizar_usuario/{{e}}" method="POST">

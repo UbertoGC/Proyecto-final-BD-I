@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/estilos.css')}}">
+    <title>El Almoadino</title>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages()  %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="flash" role="alert">
+      {{message}}
+    </div> 
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="formulario">
+      <h1>Inicie sesión</h1>
+      <form action="{{url_for('ingreso')}}" method="POST">
+        <div>
+          <label>Usuario: </label> <br/>
+          <input type="text" name="user" placeholder="Escriba su usuario aquí" required >
+        </div>
+        <div>
+          <label>Contraseña: </label> <br/>
+          <input type="text" name="contra" placeholder="Escriba su contraseña aquí" required >
+        </div>
+        <button type="submit" class="btn">
+          Ingresar
+        </button>
+      </form>
+      <a href="/registrar_usuario" ><button class="btn2">Registrarse</button></a>
+    </div>
+  </body>
+</html>

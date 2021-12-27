@@ -68,6 +68,7 @@
             <td>Pais del Proveedor</td>
             <td>Departamento del Proveedor</td>
             <td>Cantidad</td>
+            <td>Editar</td>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +84,9 @@
               <td>{{d['proveedor_pais']}}</td>
               <td>{{d['proveedor_departamento']}}</td>
               <td>{{d['cantidad']}}</td>
+              <td>
+                <a href="/gerente/actualizar_articulo/{{d['codigo']}}">Editar</a>
+              </td>
           </tr>
           {% endfor%}
         </tbody>

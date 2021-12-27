@@ -2,9 +2,42 @@ from flask_mysqldb import MySQL
 class Model:
     def __init__(self, app):
         self.mysql=MySQL(app)
-        pass    
+        pass  
+    def actualizar_sofa(self, request, codigo2):
+        cur=self.mysql.connection.cursor()
+        query="CALL actualizar_sofa(%(codigo)s,%(nombre)s,%(precio)s,%(material)s,%(proveedor)s)"
+        registrador={'codigo':codigo2,'nombre':request.form['nombre'],'precio':request.form['precio'] 
+        ,'material':request.form['material'],'proveedor':request.form['proveedor']}
+        cur.execute(query,registrador)
+        self.mysql.connection.commit()
+        cur.execute("SELECT * FROM oficina")
+        data = []
+        contenido = {}
+        resultados=cur.fetchall()
+        for resultado in resultados:
+            contenido={'codigo':resultado[0],'pais':resultado[1], 'direccion':resultado[2], 
+            'departamento':resultado[3]}
+            data.append(contenido)
+        return data
+
+
+
+    def comprar(self, request, codigo):
+        cur=self.mysql.connection.cursor()
+        query="CALL comprar_sofa(%(codigo)s,%(sofa)s,%(cantidad)s,%(oficina)s)"
+        actualizador={'codigo': codigo, 'sofa': request.form['sofa'], 'cantidad': request.form['cantidad'],'oficina': request.form['oficina']}
+        cur.execute(query,actualizador)
+        self.mysql.connection.commit()
     def actualizar_usuario(self, request, codigo):
-        
+        cur=self.mysql.connection.cursor()
+        query="CALL actualizar_usuario(%(codigo)s,%(nombre)s,%(primer_apellido)s,%(segundo_apellido)s,%(usuario)s,%(clave)s, %(pais)s,%(departamento)s,%(genero)s,%(direccion)s,%(fecha_de_nacimiento)s)"
+        actualizador={'codigo': codigo, 'nombre': request.form['nombre'],'primer_apellido': request.form['primer_apellido']
+            ,'segundo_apellido': request.form['segundo_apellido'],'genero': request.form['genero'],
+            'usuario':request.form['usuario'], 'clave':request.form['clave'],'direccion': request.form['direccion'], 
+            'pais':request.form['pais'], 'departamento':request.form['departamento'], 'fecha_de_nacimiento':request.form['fecha_de_nacimiento']}
+        cur.execute(query,actualizador)
+        self.mysql.connection.commit()
+
     def registrar_usuario(self, request):
         cur=self.mysql.connection.cursor()
         data=0

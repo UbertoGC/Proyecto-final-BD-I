@@ -1182,7 +1182,26 @@ BEGIN
 END;
 //
 DELIMITER ;
-
+DELIMITER //
+drop procedure if exists `actualizar_usuario`;//
+CREATE  PROCEDURE `actualizar_usuario`(codigo_2 integer,nombre_persona_2 varchar(30), primer_apellido_2 varchar(30), 
+segundo_apellido_2 varchar(30), usuario_2 varchar(30), clave_2 text, pais_2 varchar(30), departamento_2 varchar(30), genero_2 varchar(1), direccion_2 text, fecha_de_nacimiento_2 date)
+BEGIN
+    if ((select count(*) from nombre where nombres = nombre_persona_2 and 
+    primer_apellido = primer_apellido_2 and segundo_apellido = segundo_apellido_2)=0) then
+		if ((select count(*) from usuarios where usuario like usuario_2)=0) then
+			update nombre n set n.nombres=nombre_persona_2,
+            n.primer_apellido = primer_apellido_2,
+            n.segundo_apellido = segundo_apellido_2 where n.codigo_persona=codigo_2;
+            update persona p set p.fecha_de_nacimiento=fecha_de_nacimiento_2, p.genero=genero_2, 
+            p.direccion=direccion_2, p.pais=pais_2, p.departamento=departamento_2 where p.codigo=codigo_2;
+            update usuarios u set u.usuario=usuario_2, u.usuario=clave_2
+            where u.codigo_persona=codigo_2;
+		end if;
+    end if;
+END;
+//
+DELIMITER;
 DELIMITER //
 drop procedure if exists `registrar_usuario`;//
 CREATE  PROCEDURE `registrar_usuario`(nombre_persona_2 varchar(30), primer_apellido_2 varchar(30), 
@@ -1231,6 +1250,17 @@ BEGIN
 	declare c integer;
     set c=(select max(s.codigo) as 'maximo' from sofas s)+1;
     insert into sofas values(c,nombre_2, precio_2,codigo_proveedor,material_2);
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+drop procedure if exists `actualizar_sofa`;//
+CREATE  PROCEDURE `actualizar_sofa`(codigo_2 integer, nombre_2 varchar(30), precio_2 decimal(10,2), 
+material_2 varchar(30), codigo_proveedor_2 integer)
+BEGIN
+    update sofas set nombre=nombre_2, precio=precio_2, codigo_proveedor=codigo_proveedor_2, material=material_2
+    where codigo=codigo_2;
 END;
 //
 DELIMITER ;

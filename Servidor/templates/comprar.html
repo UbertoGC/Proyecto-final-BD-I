@@ -6,8 +6,24 @@
   </head>
   <body>
     <div class="formulario">
-      <a href="/usuario/comprar" ><button class="btn2">Comprar</button></a>
-      <a href="/usuario/actualizar" ><button class="btn2">Editar usuario</button></a>
+      <h1>Comprar Sofa</h1>
+      <form action="/comprar_2/{{d}}" method="POST">
+        <div>
+          <label>Sofa: </label> <br/>
+          <input type="number" name="sofa" placeholder="Escriba el codigo del sofa aquí" required >
+        </div>
+        <div>
+          <label>Cantidad: </label> <br/>
+          <input type="number" name="cantidad" placeholder="Escriba la cantidad aquí" required >
+        </div>
+        <div>
+            <label>Oficina: </label> <br/>
+            <input type="number" name="oficina" placeholder="Escriba el codigo de la oficina aquí" required >
+        </div>
+        <button type="submit" class="btn">
+          Comprar
+        </button>
+      </form>
     </div>
   </body>
 </html>
